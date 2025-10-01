@@ -6,7 +6,7 @@ st.set_page_config(page_title="Comparador de Estrategias BSC", layout="centered"
 st.title("Generador de Estrategias del Balanced Scorecard con Hugging Face API")
 
 # Campo para token (los estudiantes también pueden usar uno gratuito propio)
-HF_TOKEN = "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"
+HF_TOKEN = "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"
 
 archivo = st.file_uploader("Sube tu archivo Excel con columnas: Perspectiva, Objetivo, Meta, Indicador, Iniciativa", type=["xlsx"])
 
