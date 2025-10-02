@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
 import requests
+import os
 
 st.set_page_config(page_title="Comparador de Estrategias BSC", layout="centered")
 st.title("Generador de Estrategias del Balanced Scorecard con Hugging Face API")
 
 # Campo para token (los estudiantes también pueden usar uno gratuito propio)
-HF_TOKEN = "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"
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 archivo = st.file_uploader("Sube tu archivo Excel con columnas: Perspectiva, Objetivo, Meta, Indicador, Iniciativa", type=["xlsx"])
 
