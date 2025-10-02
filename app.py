@@ -24,19 +24,21 @@ if archivo:
 
     if st.button("Generar Estrategia con IA"):
         prompt = f"""Eres un experto en planeación estratégica. 
-Redacta en español una estrategia clara, concreta y medible 
-que relacione la siguiente iniciativa con el cumplimiento del objetivo.
+Redacta en español **tres estrategias organizacionales** claras, concretas y medibles 
+que relacionen la siguiente iniciativa con el cumplimiento del objetivo.
 
 Objetivo: {objetivo}
 Iniciativa: {iniciativa}
 
-Estrategia:"""
+Estrategias:"""
         try:
-            result = generator(prompt, max_length=500, min_length=150, temperature=0.9, top_p=0.9, num_return_sequences=3)
+            result = generator(prompt, max_length=500, min_length=150, temperature=0.9, top_p=0.9, do_sample=True, num_return_sequences=3)
             # estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
             st.success("Estrategia IA generada:")
-            for i, r in enumerate(result):
-                st.write(f"**Estrategia {i+1}:** {r['generated_text'].replace(prompt, '').strip()}")
+            for i, r in enumerate(results):
+                estrategia_ia = r["generated_text"].replace(prompt, "").strip()
+                st.markdown(f"### Estrategia {i+1}")
+                st.write(estrategia_ia)
         
         except Exception as e:
             st.error(f"Error ejecutando el modelo: {e}")
