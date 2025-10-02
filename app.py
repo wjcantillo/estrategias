@@ -32,10 +32,11 @@ Iniciativa: {iniciativa}
 
 Estrategia:"""
         try:
-            result = generator(prompt, max_length=256, do_sample=True, temperature=0.7)
-            estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
+            result = generator(prompt, max_length=500, min_length=150, temperature=0.9, top_p=0.9, num_return_sequences=3)
+            # estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
             st.success("Estrategia IA generada:")
-            st.write(estrategia_ia)
+            for i, r in enumerate(result):
+                st.write(f"**Estrategia {i+1}:** {r['generated_text'].replace(prompt, '').strip()}")
         
         except Exception as e:
             st.error(f"Error ejecutando el modelo: {e}")
