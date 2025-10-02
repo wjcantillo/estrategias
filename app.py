@@ -24,7 +24,7 @@ if archivo:
 
     if st.button("Generar Estrategia con IA"):
         prompt = f"""Eres un experto en planeación estratégica. 
-Redacta en español **tres estrategias organizacionales** claras, concretas y medibles 
+Redacta en español **dos estrategias organizacionales** claras, concretas y medibles 
 que relacionen la siguiente iniciativa con el cumplimiento del objetivo.
 
 Objetivo: {objetivo}
