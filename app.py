@@ -28,17 +28,15 @@ if archivo:
     iniciativa = df.loc[index, "Iniciativa"]
 
     if st.button("Generar Estrategia con IA"):
-        prompt = f"""Tarea: Redactar en español una estrategia organizacional clara, concreta y medible
-que relacione la siguiente iniciativa con el cumplimiento del objetivo.
-
+        prompt = f"""
+Genera únicamente una estrategia organizacional en español que relacione la siguiente iniciativa con el cumplimiento del objetivo.
 Objetivo: {objetivo}
 Iniciativa: {iniciativa}
-
-Estrategia:"""
-           
+Estrategia:
+"""
         try:
-            result = generator(prompt, max_length=256)
-            estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
+            result = generator(prompt, max_length=128)
+            estrategia_ia = result[0]["generated_text"]
             st.success("Estrategia IA generada:")
             st.write(estrategia_ia)
         
