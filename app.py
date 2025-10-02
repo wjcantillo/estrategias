@@ -5,11 +5,6 @@ from transformers import pipeline
 st.set_page_config(page_title="Generador de Estrategias BSC", layout="centered")
 st.title("Generador de Estrategias del Balanced Scorecard (Optimizado)")
 
-st.markdown("""
-Sube tu archivo Excel con las columnas: **Perspectiva, Objetivo, Meta, Indicador, Iniciativa**  
-Esta versión usa el modelo **`google/flan-t5-small`** para que funcione en Streamlit Cloud free.
-""")
-
 # Cargar modelo localmente (puede tardar la primera vez)
 @st.cache_resource
 def load_model():
