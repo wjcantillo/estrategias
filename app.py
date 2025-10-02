@@ -8,7 +8,7 @@ st.title("Generador de Estrategias del Balanced Scorecard con Hugging Face API")
 # Cargar modelo localmente (puede tardar la primera vez)
 @st.cache_resource
 def load_model():
-    return pipeline("text2text-generation", model="google/flan-t5-small")
+    return pipeline("text-generation", model="mistralai/Mistral-7B-Instruct-v0.1")
 
 generator = load_model()
 
@@ -23,14 +23,20 @@ if archivo:
     iniciativa = df.loc[index, "Iniciativa"]
 
     if st.button("Generar Estrategia con IA"):
-        prompt = f"Eres un experto en planeación estratégica. Objetivo: {objetivo} Iniciativa: {iniciativa} Redacta una estrategia clara que relacione la iniciativa con el cumplimiento del objetivo."
+        prompt = f"""Eres un experto en planeación estratégica.
+Redacta en español una estrategia clara, concreta y medible
+que relacione la siguiente iniciativa con el cumplimiento del objetivo.
 
+Objetivo: {objetivo}
+Iniciativa: {iniciativa}
+
+Estrategia:"""
+           
         try:
-            result = generator(prompt, max_length=256, do_sample=True, temperature=0.7)
-            estrategia_ia = result[0]["generated_text"]
+            result = generator(prompt, max_length=300, do_sample=True, temperature=0.7)
+            estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
             st.success("Estrategia IA generada:")
             st.write(estrategia_ia)
-            
         except Exception as e:
             st.error(f"Error ejecutando el modelo: {e}")
 else:
