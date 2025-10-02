@@ -32,13 +32,18 @@ Iniciativa: {iniciativa}
 
 Estrategias:"""
         try:
-            results = generator(prompt, max_length=300, min_length=100, temperature=0.7, top_p=0.9, do_sample=True, num_return_sequences=2)
+            results = generator(prompt, max_length=300, min_length=100, temperature=0.8, top_p=0.9, do_sample=True, num_return_sequences=2, no_repeat_ngram_size=3, repetition_penalty=1.3)
             # estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
             st.success("Estrategia IA generada:")
             for i, r in enumerate(results):
+                # limpiar prompt del resultado
                 estrategia_ia = r["generated_text"].replace(prompt, "").strip()
+                # eliminar líneas repetidas
+                lineas = estrategia_ia.splitlines()
+                lineas_unicas = list(dict.fromkeys([l.strip() for l in lineas if l.strip()]))
+                estrategia_ia_limpia = "\n".join(lineas_unicas)
                 st.markdown(f"### Estrategia {i+1}")
-                st.write(estrategia_ia)
+                st.write(estrategia_ia_limpia)
         
         except Exception as e:
             st.error(f"Error ejecutando el modelo: {e}")
