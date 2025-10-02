@@ -32,7 +32,7 @@ Iniciativa: {iniciativa}
 
 Estrategias:"""
         try:
-            results = generator(prompt, max_length=300, min_length=100, temperature=0.8, top_p=0.9, do_sample=True, num_return_sequences=2, no_repeat_ngram_size=3, repetition_penalty=1.3)
+            results = generator(prompt, max_length=256, min_length=60, temperature=0.7, top_p=0.9, do_sample=True, num_return_sequences=2, no_repeat_ngram_size=3, repetition_penalty=1.3)
             # estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
             st.success("Estrategia IA generada:")
             for i, r in enumerate(results):
