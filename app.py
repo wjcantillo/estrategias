@@ -29,7 +29,7 @@ if archivo:
     iniciativa = df.loc[index, "Iniciativa"]
 
     if st.button("Generar Estrategia con IA"):
-        prompt = f"""Eres un experto en planeación estratégica. Objetivo: {objetivo} Iniciativa: {iniciativa} Redacta una estrategia clara que relacione la iniciativa con el cumplimiento del objetivo."""
+        prompt = f"Eres un experto en planeación estratégica. Objetivo: {objetivo} Iniciativa: {iniciativa} Redacta una estrategia clara que relacione la iniciativa con el cumplimiento del objetivo."
         # api_url = "https://api-inference.huggingface.co/models/google/flan-t5-small"
         # headers = {"Authorization": f"Bearer {HF_TOKEN}"}
         # payload = {
