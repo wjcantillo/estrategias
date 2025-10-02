@@ -8,7 +8,7 @@ st.title("Generador de Estrategias del Balanced Scorecard (Optimizado)")
 # Cargar modelo localmente (puede tardar la primera vez)
 @st.cache_resource
 def load_model():
-    return pipeline("text2text-generation", model="google/flan-t5-small")
+    return pipeline("text-generation", model="bigscience/bloomz-560m")
 
 generator = load_model()
 
@@ -23,15 +23,17 @@ if archivo:
     iniciativa = df.loc[index, "Iniciativa"]
 
     if st.button("Generar Estrategia con IA"):
-        prompt = f"""
-Genera únicamente una estrategia organizacional en español que relacione la siguiente iniciativa con el cumplimiento del objetivo.
+        prompt = f"""Eres un experto en planeación estratégica. 
+Redacta en español una estrategia clara, concreta y medible 
+que relacione la siguiente iniciativa con el cumplimiento del objetivo.
+
 Objetivo: {objetivo}
 Iniciativa: {iniciativa}
-Estrategia:
-"""
+
+Estrategia:"""
         try:
-            result = generator(prompt, max_length=128)
-            estrategia_ia = result[0]["generated_text"]
+            result = generator(prompt, max_length=256, do_sample=True, temperature=0.7)
+            estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
             st.success("Estrategia IA generada:")
             st.write(estrategia_ia)
         
