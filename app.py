@@ -4,7 +4,7 @@ import requests
 
 st.title("Comparador de Estrategias BSC con IA")
 
-BACKEND_URL = "https://walbertocantillo-bsc-estrategias-model.hf.space/run/predict"
+BACKEND_URL = "https://walbertocantillo-bsc-estrategias-model.hf.space"
 
 archivo = st.file_uploader("Sube tu Excel con el BSC", type=["xlsx"])
 
