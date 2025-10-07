@@ -1,51 +1,26 @@
 import streamlit as st
 import pandas as pd
-from transformers import pipeline
+import requests
 
-st.set_page_config(page_title="Generador de Estrategias BSC", layout="centered")
-st.title("Generador de Estrategias del Balanced Scorecard (Optimizado)")
+st.title("Comparador de Estrategias BSC con IA")
 
-# Cargar modelo localmente (puede tardar la primera vez)
-@st.cache_resource
-def load_model():
-    return pipeline("text-generation", model="bigscience/bloomz-560m")
+BACKEND_URL = "https://huggingface.co/spaces/walbertocantillo>/bsc-estrategias-model/api/predict"
 
-generator = load_model()
-
-archivo = st.file_uploader("Sube tu archivo Excel con columnas: Perspectiva, Objetivo, Meta, Indicador, Iniciativa", type=["xlsx"])
+archivo = st.file_uploader("Sube tu Excel con el BSC", type=["xlsx"])
 
 if archivo:
     df = pd.read_excel(archivo)
     st.dataframe(df)
+    idx = st.number_input("Selecciona fila", 0, len(df)-1)
+    objetivo = df.loc[idx, "Objetivo"]
+    iniciativa = df.loc[idx, "Iniciativa"]
 
-    index = st.number_input("Selecciona la fila:", 0, len(df)-1)
-    objetivo = df.loc[index, "Objetivo"]
-    iniciativa = df.loc[index, "Iniciativa"]
-
-    if st.button("Generar Estrategia con IA"):
-        prompt = f"""Eres un experto en planeación estratégica. 
-Redacta en español **dos estrategias organizacionales** claras, concretas y medibles 
-que relacionen la siguiente iniciativa con el cumplimiento del objetivo.
-
-Objetivo: {objetivo}
-Iniciativa: {iniciativa}
-
-Estrategias:"""
-        try:
-            results = generator(prompt, max_length=256, min_length=60, temperature=0.7, top_p=0.9, do_sample=True, num_return_sequences=2, no_repeat_ngram_size=3, repetition_penalty=1.3)
-            # estrategia_ia = result[0]["generated_text"].replace(prompt, "").strip()
-            st.success("Estrategia IA generada:")
-            for i, r in enumerate(results):
-                # limpiar prompt del resultado
-                estrategia_ia = r["generated_text"].replace(prompt, "").strip()
-                # eliminar líneas repetidas
-                lineas = estrategia_ia.splitlines()
-                lineas_unicas = list(dict.fromkeys([l.strip() for l in lineas if l.strip()]))
-                estrategia_ia_limpia = "\n".join(lineas_unicas)
-                st.markdown(f"### Estrategia {i+1}")
-                st.write(estrategia_ia_limpia)
-        
-        except Exception as e:
-            st.error(f"Error ejecutando el modelo: {e}")
-else:
-    st.info("Sube el Excel para continuar.")
+    if st.button("Generar estrategia con IA"):
+        payload = {"data": [objetivo, iniciativa]}
+        resp = requests.post(BACKEND_URL, json=payload)
+        if resp.status_code == 200:
+            estrategia = resp.json()["data"][0]
+            st.success("Estrategia generada:")
+            st.write(estrategia)
+        else:
+            st.error(f"Error en backend: {resp.text}")
