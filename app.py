@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
-import requests
+from gradio_client import Client
 
 st.title("Comparador de Estrategias BSC con IA")
 
-BACKEND_URL = "https://walbertocantillo-bsc-estrategias-model.hf.space/run/predict"
+client = Client("walbertocantillo/bsc-estrategias-model")
 
 archivo = st.file_uploader("Sube tu Excel con el BSC", type=["xlsx"])
 
@@ -16,11 +16,10 @@ if archivo:
     iniciativa = df.loc[idx, "Iniciativa"]
 
     if st.button("Generar estrategia con IA"):
-        payload = {"data": [objetivo, iniciativa]}
-        resp = requests.post(BACKEND_URL, json=payload)
-        if resp.status_code == 200:
-            estrategia = resp.json()["data"][0]
+        try:
+            # Llamada al backend Hugging Face
+            result = client.predict(objetivo=objetivo, iniciativa=iniciativa, api_name="/predict")
             st.success("Estrategia generada:")
-            st.write(estrategia)
-        else:
-            st.error(f"Error en backend: {resp.text}")
+            st.write(result)
+        except Exception as e:
+            st.error(f"Error en backend: {e}")
