@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from gradio_client import Client
 
-st.header("Comparador de Estrategias BSC con IA")
+st.subheader("Comparador de Estrategias BSC con IA")
 
 client = Client("walbertocantillo/bsc-estrategias-model")
 
